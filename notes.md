@@ -8,19 +8,19 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | --------------------------------------------------- | ------------------ | ----------------- | ------------ |
 | View home page                                      | home.jsx	         | none              | none         |
 | Register new user<br/>(t@jwt.com, pw: test)         | register.jsx       | [POST] /api/auth	 |INSERT INTO user (name, email, password) VALUES (?, ?, ?)INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)|
-| Login new user<br/>(t@jwt.com, pw: test)            |     afasdfasfadfs               |         asdfdsf          |    adfadsdasf          |
-| Order pizza                                         |             a       |            a       |          a    |
-| Verify pizza                                        |           a         |           a        |          a    |
-| View profile page                                   |            a        |            a       |       a       |
-| View franchise<br/>(as diner)                       |           a         |              a     |           a   |
-| Logout                                              |            a        |           a        |         a     |
-| View About page                                     |          a          |             a      |        a      |
-| View History page                                   |           a         |            a       |     a         |
-| Login as franchisee<br/>(f@jwt.com, pw: franchisee) |           a         |           a        |       a       |
-| View franchise<br/>(as franchisee)                  |            a        |            a       |      a        |
-| Create a store                                      |            a        |              a     |        a      |
-| Close a store                                       |            a        |             a      |       a       |
-| Login as admin<br/>(a@jwt.com, pw: admin)           |            a        |              a     |         a     |
-| View Admin page                                     |            a        |            a       |     a         |
-| Create a franchise for t@jwt.com                    |         a           |           a        |       a       |
-| Close the franchise for t@jwt.com                   |            a        |           a        |       a       |
+| Login new user<br/>(t@jwt.com, pw: test)            |     menu.tsx               |         asdfdsf          |    adfadsdasf          |
+| Order pizza                                         |            menu.tsx       |            [GET] /api/ordermenu [GET] /api/franchise	       |          SELECT * FROM menu SELECT id, name FROM franchise SELECT id, name FROM store WHERE franchiseId=?|
+| Verify pizza                                        |           delivery         |           [POST] /api/order/verify	        |INSERT INTO dinerOrder (dinerId, franchiseId, storeId, date) VALUES (?, ?, ?, now()) INSERT INTO orderItem (orderId, menuId, description, price) VALUES (?, ?, ?, ?)|
+| View profile page                                   |dinerDashboard.tsx   |[GET] api/order	       |       SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage} SELECT id, menuId, description, price FROM orderItem WHERE orderId=?|
+| View franchise<br/>(as diner)                       |franchiseDashboard.tsx| none    |           none  |
+| Logout                                              |           logout.jsx	        |   [DELETE] /api/auth | DELETE FROM auth WHERE token=?|
+| View About page                                     |          about.tsx	          |             none      |        none     |
+| View History page                                   |           history.tsx	         |            none       |      none        |
+| Login as franchisee<br/>(f@jwt.com, pw: franchisee) |           login.tsx	         |           [PUT] /api/auth	        |       INSERT INTO auth (token, userId) VALUES (?, ?)|
+| View franchise<br/>(as franchisee)                  |            franchiseDashboard.jsx	        |            [GET] /api/franchice	       |      SELECT objectId FROM userRole WHERE role='franchisee' AND userId=?, SELECT id, name FROM franchise WHERE id in (${franchiseIds.join(',')})|
+| Create a store                                      |            createStore.tsx	        |              [POST] /api/franchise/${franchise.id}/store	     |        INSERT INTO store (franchiseId, name) VALUES (?, ?)|
+| Close a store                                       | closeStore.tsx	|[DELETE] /api/franchise/${franchise.id}/store/${store.id}|DELETE FROM store WHERE franchiseId=? AND id=?|
+| Login as admin<br/>(a@jwt.com, pw: admin)           |login.tsx | [PUT] /api/auth	     | INSERT INTO auth (token, userId) VALUES (?, ?)|
+| View Admin page                                     |adminDashboard.tsx	        | [GET] /api/franchicse	       | SELECT id, name FROM franchise, SELECT id, name FROM store WHERE franchiseId=?|
+| Create a franchise for t@jwt.com                    |createFranchise.tsx | [POST] /api/franchise | SELECT id, name FROM user WHERE email=?, INSERT INTO franchise (name) VALUES (?), INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?) |
+| Close the franchise for t@jwt.com                   |closeFranchise.tsx	| [DELETE] /api/franchise/${franchise.id}	| DELETE FROM store WHERE franchiseId=?, DELETE FROM userRole WHERE objectId=?, DELETE FROM franchise WHERE id=?|
