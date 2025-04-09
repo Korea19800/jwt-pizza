@@ -44,5 +44,16 @@
 
 ### Against Katie Greer
 
+##### 1. Admin Access Testing
+
+- **Approach:** Attempted SQL injection via input fields
+- **Result:** No vulnerabilities detected
+- **Status:** SECURE
+
+##### 2. Order Testing
+
+- **Approach:** Attempted injection via curl code
+- **Result:** Able to order pizza through Non-existing franchise such as BYU, but wasn't able to change the description or price of pizza
+- **Status:** PARTIAL CONCERN
 
 
